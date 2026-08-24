@@ -1,0 +1,13 @@
+spring:
+  cloud:
+    scheduling:
+      # Distributed mode: shedlock, schedulerx
+      distributed-mode: shedlock
+  datasource:
+    driver-class: com.mysql.cj.jdbc.Driver
+    # Change to your database jdbc url value
+    url: jdbc:mysql://127.0.0.1:3306/testdb?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true
+    # Change to your database username value
+    username: root
+    # Change to your database password value
+    password: 123456
