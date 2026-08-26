@@ -1,0 +1,28 @@
+server:
+  port: 8013
+
+spring:
+  application:
+    name: integrated-order
+  cloud:
+    nacos:
+      discovery:
+        server-addr: nacos-server:8848
+        group: integrated-example
+      config:
+        server-addr: nacos-server:8848
+        group: integrated-example
+        file-extension: yaml
+  config:
+    import:
+      - optional:nacos:integrated-order.yaml
+      - optional:nacos:datasource-config.yaml
+
+seata:
+  application-id: ${spring.application.name}
+  tx-service-group: ${spring.application.name}-group
+  service:
+    vgroup-mapping:
+      integrated-order-group: default
+    grouplist:
+      default: seata-server:8091

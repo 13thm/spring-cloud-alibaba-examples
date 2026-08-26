@@ -1,0 +1,29 @@
+server:
+  port: 28084
+spring:
+  application:
+    name: rocketmq-broadcast-consumer1-example
+  cloud:
+    stream:
+      function:
+        definition: consumer;
+          # 【函数式编程模式】定义函数bean名称为 consumer
+          # SpringCloudStream 会去找容器中名字叫 consumer 的 Function/Consumer Bean
+        # consumer-in-0 这个输入绑定，就是对接这个 consumer 函数的入参
+        # 结尾分号可以去掉，写 consumer 即可
+      # ==========【通用配置，所有中间件通用】==========
+      bindings:
+        consumer-in-0: # consumer函数的0号输入通道
+          destination: broadcast # rocketmq的topic名字
+          group: broadcast-consumer # 消费组
+      rocketmq:
+        binder:
+          name-server: localhost:9876
+        bindings:
+          consumer-in-0: # 和上面通道名字必须一模一样！关联起来
+            consumer:
+              messageModel: BROADCASTING # rocketmq特有：广播模式
+
+logging:
+  level:
+    org.springframework.context.support: debug

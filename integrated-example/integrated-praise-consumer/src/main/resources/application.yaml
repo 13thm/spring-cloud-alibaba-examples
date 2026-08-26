@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: integrated-consumer
+  cloud:
+    nacos:
+      config:
+        file-extension: yaml
+        server-addr: nacos-server:8848
+        group: integrated-example
+      discovery:
+        server-addr: nacos-server:8848
+        group: integrated-example
+  config:
+    import:
+      - optional:nacos:integrated-consumer.yaml
+      - optional:nacos:datasource-config.yaml
+
+
+server:
+  port: 8014
