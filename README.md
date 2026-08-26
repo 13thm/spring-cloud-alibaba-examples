@@ -6,8 +6,8 @@
 - [×] nacos-example
 - [×] rocketmq-example
 - [×] seata-example
-- [ ] sentinel-example
-- [ ] spring-cloud-alibaba-sidecar-examples
+- [×] sentinel-example
+- [×] spring-cloud-alibaba-sidecar-examples
 - [ ] spring-cloud-bus-rocketmq-example
 - [ ] spring-cloud-scheduling-example
 - [ ] spring-cloud-scheduling-example
