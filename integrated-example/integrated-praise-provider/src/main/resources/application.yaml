@@ -1,15 +1,22 @@
+# ============================================================
+# 点赞生产者服务本地配置（端口 8015）
+# MQ 绑定配置在 Nacos 的 integrated-provider.yaml 中
+# ============================================================
 spring:
   application:
     name: integrated-provider
   cloud:
     nacos:
+      # ---- 配置中心：拉取 integrated-provider.yaml（Stream/RocketMQ 绑定配置）----
       config:
         file-extension: yaml
         server-addr: nacos-server:8848
         group: integrated-example
+      # ---- 服务注册：被网关发现（/praise/rocketmq、/praise/sentinel 路由到本服务）----
       discovery:
         server-addr: nacos-server:8848
         group: integrated-example
+  # ---- 从 Nacos 导入 MQ 配置：包含 praise-output 绑定、topic、RocketMQ nameserver ----
   config:
     import: optional:nacos:integrated-provider.yaml
 

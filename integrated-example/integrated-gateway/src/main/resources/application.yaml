@@ -1,3 +1,7 @@
+# ============================================================
+# 网关服务本地配置（端口 30010）
+# 路由规则、限流等业务配置放在 Nacos 的 integrated-gateway.yaml 中
+# ============================================================
 server:
   port: 30010
 spring:
@@ -5,12 +9,18 @@ spring:
     name: integrated-gateway
   cloud:
     nacos:
+      # ---- Nacos 配置中心 ----
       config:
-        server-addr: nacos-server:8848
-        group: integrated-example
-        file-extension: yaml
+        server-addr: nacos-server:8848   # Nacos 服务端地址（docker 网络内的主机名）
+        group: integrated-example        # 配置分组：示例专用分组，与其他业务隔离
+        file-extension: yaml             # 配置文件格式
+      # ---- Nacos 注册中心 ----
       discovery:
         server-addr: nacos-server:8848
         group: integrated-example
+  # ---- 从 Nacos 拉取配置文件 ----
+  # optional: 表示 Nacos 上没有该配置也不阻止启动
+  # 真正的网关路由规则（lb://integrated-order 等）在 integrated-gateway.yaml 里维护，
+  # 好处：路由变更只需改 Nacos 配置，网关监听到变更后动态刷新，无需重启
   config:
     import: optional:nacos:integrated-gateway.yaml

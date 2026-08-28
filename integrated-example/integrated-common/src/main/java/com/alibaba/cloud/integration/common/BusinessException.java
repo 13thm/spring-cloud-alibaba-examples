@@ -17,10 +17,23 @@
 package com.alibaba.cloud.integration.common;
 
 /**
+ * 业务异常类
+ *
+ * <p>作用：本整合示例中所有微服务的"业务失败"统一用该异常表达。
+ * 典型用法是：库存不足、账户余额不足时，Service 层抛出该异常，
+ * 由 Controller 层捕获后转换为 {@link Result#failed(String)} 返回给调用方。</p>
+ *
+ * <p>与 Seata 的关系（重要）：在分布式事务场景下，这个异常必须从
+ * {@code @GlobalTransactional} 标注的方法中抛出去，Seata TM 才会感知到
+ * 业务失败并向 TC 发起全局回滚 —— 各分支事务（库存、账户）随之一起回滚。</p>
+ *
  * @author TrevorLink
  */
 public class BusinessException extends RuntimeException {
 
+	/**
+	 * @param message 业务失败原因描述，例如 "no enough balance"
+	 */
 	public BusinessException(String message) {
 		super(message);
 	}

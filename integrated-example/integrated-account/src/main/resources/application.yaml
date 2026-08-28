@@ -1,3 +1,7 @@
+# ============================================================
+# 账户服务本地配置（端口 8012）
+# 数据源配置在 Nacos 的 datasource-config.yaml（多服务共享）
+# ============================================================
 server:
   port: 8012
 
@@ -6,23 +10,32 @@ spring:
     name: integrated-account
   cloud:
     nacos:
+      # ---- 服务注册 ----
       discovery:
         server-addr: nacos-server:8848
         group: integrated-example
+      # ---- 配置中心 ----
       config:
         server-addr: nacos-server:8848
         group: integrated-example
         file-extension: yaml
+  # ---- 从 Nacos 导入配置 ----
+  # 1. integrated-account.yaml：本服务专属配置（含覆盖数据源 url 指向 integrated_account 库）
+  # 2. datasource-config.yaml ：公共数据源配置（驱动/账号/密码、mybatis 驼峰映射等）
   config:
     import:
       - optional:nacos:integrated-account.yaml
       - optional:nacos:datasource-config.yaml
 
+# ---- Seata 客户端配置（AT 模式），与库存/订单服务保持同一套路 ----
 seata:
   application-id: ${spring.application.name}
+  # 事务分组：integrated-account-group
   tx-service-group: ${spring.application.name}-group
   service:
+    # 事务分组 → TC 集群映射
     vgroup-mapping:
       integrated-account-group: default
+    # TC（Seata Server）直连地址
     grouplist:
       default: seata-server:8091

@@ -1,3 +1,7 @@
+# ============================================================
+# 【Nacos 配置】库存服务专属配置
+# 只覆盖数据源 url 指向自己的库；驱动/账号/密码来自共享的 datasource-config.yaml
+# ============================================================
 spring:
   datasource:
     url: jdbc:mysql://integrated-mysql:3306/integrated_storage?useSSL=false&characterEncoding=utf8

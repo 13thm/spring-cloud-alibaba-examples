@@ -17,12 +17,16 @@
 package com.alibaba.cloud.integration.order.feign.dto;
 
 /**
+ * 库存扣减请求 DTO（订单服务侧的"本地副本"，与 integrated-storage 的 StorageDTO 内容相同）。
+ *
  * @author TrevorLink
  */
 public class StorageDTO {
 
+	/** 商品编码 */
 	private String commodityCode;
 
+	/** 扣减数量 */
 	private Integer count;
 
 	public String getCommodityCode() {

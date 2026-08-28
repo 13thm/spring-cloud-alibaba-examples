@@ -1,10 +1,15 @@
+# ============================================================
+# 【Nacos 配置】公共数据源配置 —— 多服务共享的配置文件
+# 被 storage/account/order/consumer 四个服务 import（见各自 application.yaml）
+# 各服务在自己专属配置里只覆盖 url（指向各自的库），账号密码等在此统一维护
+# ============================================================
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     username: 'root'
     password: 'root'
   main:
-    allow-bean-definition-overriding: true
+    allow-bean-definition-overriding: true   # 允许后导入的配置覆盖先前的 Bean 定义（分库 url 覆盖机制的前提）
 mybatis:
   configuration:
-    map-underscore-to-camel-case: true
+    map-underscore-to-camel-case: true       # 数据库下划线字段 ↔ Java 驼峰属性自动映射（commodity_code → commodityCode）

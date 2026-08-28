@@ -1,3 +1,7 @@
+# ============================================================
+# 订单服务本地配置（端口 8013）
+# 订单服务 = Seata TM（全局事务发起方）+ Feign 消费方
+# ============================================================
 server:
   port: 8013
 
@@ -6,18 +10,23 @@ spring:
     name: integrated-order
   cloud:
     nacos:
+      # ---- 服务注册：被网关发现（Path=/order/create 路由到本服务） ----
       discovery:
         server-addr: nacos-server:8848
         group: integrated-example
+      # ---- 配置中心 ----
       config:
         server-addr: nacos-server:8848
         group: integrated-example
         file-extension: yaml
+  # ---- 从 Nacos 导入配置（同库存/账户服务模式）----
   config:
     import:
       - optional:nacos:integrated-order.yaml
       - optional:nacos:datasource-config.yaml
 
+# ---- Seata 客户端配置（AT 模式）----
+# 订单服务持有 @GlobalTransactional（TM），同时订单落库（RM），身兼两职
 seata:
   application-id: ${spring.application.name}
   tx-service-group: ${spring.application.name}-group

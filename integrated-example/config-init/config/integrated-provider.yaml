@@ -1,14 +1,18 @@
+# ============================================================
+# 【Nacos 配置】点赞生产者 —— Spring Cloud Stream 输出绑定
+# ============================================================
 spring:
   cloud:
     stream:
       bindings:
+        # 输出通道名：与 PraiseController 中 streamBridge.send("praise-output", ...) 对应
         praise-output:
-          destination: PRAISE-TOPIC-01
-          content-type: application/json
+          destination: PRAISE-TOPIC-01           # 发往的 RocketMQ Topic
+          content-type: application/json         # 消息体 JSON 序列化
       rocketmq:
         binder:
-          name-server: rocketmq:9876
+          name-server: rocketmq:9876             # RocketMQ NameServer 地址
         bindings:
           praise-output:
             producer:
-              group: test
+              group: test                        # 生产者组

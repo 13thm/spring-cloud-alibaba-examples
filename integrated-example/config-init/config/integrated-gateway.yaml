@@ -1,27 +1,40 @@
+# ============================================================
+# 【Nacos 配置】网关路由规则 —— 动态路由的核心
+# 网关启动时通过 spring.config.import 从 Nacos 拉取本文件；
+# 修改本文件（如增删路由）后网关动态刷新，无需重启。
+# ============================================================
 spring:
   cloud:
     gateway:
       routes:
+        # 下单接口 → 订单服务（Seata 全局事务入口）
         - id: placeOrder
-          uri: lb://integrated-order
+          uri: lb://integrated-order        # lb:// = 从 Nacos 发现服务并负载均衡
           predicates:
-            - Path=/order/create
+            - Path=/order/create            # 路径匹配谓词
+        # 库存查询 → 库存服务
         - id: queryStorage
           uri: lb://integrated-storage
           predicates:
             - Path=/storage/
+        # 余额查询 → 账户服务
         - id: queryAccount
           uri: lb://integrated-account
           predicates:
             - Path=/account/
+        # 点赞(RocketMQ 削峰填谷演示) → 点赞生产者服务
         - id: praiseItemRocketMQ
           uri: lb://integrated-provider
           predicates:
             - Path=/praise/rocketmq
+        # 点赞(Sentinel 限流演示) → 点赞生产者服务
+        # ★ 路由 id "praiseItemSentinel" 与 GatewayConfig 中
+        #   GatewayFlowRule("praiseItemSentinel").setCount(5) 对应 —— 限流规则挂在路由上
         - id: praiseItemSentinel
           uri: lb://integrated-provider
           predicates:
             - Path=/praise/sentinel
+        # 点赞数查询 → 点赞消费者服务
         - id: queryPraise
           uri: lb://integrated-consumer
           predicates:

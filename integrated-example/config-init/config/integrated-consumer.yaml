@@ -1,20 +1,27 @@
+# ============================================================
+# 【Nacos 配置】点赞消费者 —— Stream 函数式消费绑定 + 拉取速率控制
+# ============================================================
 spring:
   datasource:
+    # 消费者连接的是点赞库（分库：每个业务服务一个独立数据库）
     url: jdbc:mysql://integrated-mysql:3306/integrated_praise?useSSL=false&characterEncoding=utf8
   cloud:
     stream:
       function:
+        # ★ 声明消费函数：指向容器中名为 consumer 的 Bean
+        #   （ListenerAutoConfiguration 里 Consumer<Message<PraiseMessage>> consumer()）
         definition: consumer;
       bindings:
+        # 输入通道命名规则：{函数名}-in-{序号} → consumer-in-0
         consumer-in-0:
-          destination: PRAISE-TOPIC-01
+          destination: PRAISE-TOPIC-01           # 与生产者的 topic 对齐，形成收发闭环
           content-type: application/json
-          group: praise-consumer-group-PRAISE-TOPIC-01
+          group: praise-consumer-group-PRAISE-TOPIC-01   # 消费组：同名组内负载均衡消费
       rocketmq:
         binder:
           name-server: rocketmq:9876
         bindings:
           consumer-in-0:
             consumer:
-              pullInterval: 4000
-              pullBatchSize: 4
+              pullInterval: 4000   # ★ 每 4 秒拉一次消息（削峰填谷的"阀门"）
+              pullBatchSize: 4     # ★ 每次最多拉 4 条 → 消费速率 ≈ 1条/秒，保护数据库

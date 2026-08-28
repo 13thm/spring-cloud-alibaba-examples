@@ -20,6 +20,15 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
+ * 前端页面服务启动类
+ *
+ * <p>纯 Thymeleaf 页面服务：不含任何业务逻辑，
+ * 只负责渲染三个演示页面（下单 / RocketMQ 点赞 / Sentinel 限流），
+ * 页面里的按钮再通过网关(30010)调用各微服务接口。</p>
+ *
+ * <p>把它独立成服务（而不是塞进某个业务服务）是常见的前后端分离习惯：
+ * 页面与业务服务各自独立部署、独立扩缩容。</p>
+ *
  * @author HuangSir
  * @date 2022-09-08 14:11
  */

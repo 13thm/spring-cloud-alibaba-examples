@@ -19,22 +19,34 @@ package com.alibaba.cloud.integration.order.entity;
 import java.sql.Timestamp;
 
 /**
+ * 订单实体类，对应 integrated_order 库的 {@code order} 表。
+ *
+ * <p>一张订单记录一次下单：谁(userId)买了什么(commodityCode)、
+ * 买了几件(count)、花了多少钱(money=单价2元×count)。</p>
+ *
  * @author TrevorLink
  */
 public class Order {
 
+	/** 主键，自增；插入后由 MyBatis 回填（见 OrderMapper @Options） */
 	private Integer id;
 
+	/** 下单用户 ID */
 	private String userId;
 
+	/** 商品编码 */
 	private String commodityCode;
 
+	/** 购买数量 */
 	private Integer count;
 
+	/** 订单金额（= 数量 × 2 元） */
 	private Integer money;
 
+	/** 创建时间 */
 	private Timestamp createTime;
 
+	/** 更新时间 */
 	private Timestamp updateTime;
 
 	public Integer getId() {

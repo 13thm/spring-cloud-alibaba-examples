@@ -1,3 +1,7 @@
+# ============================================================
+# 库存服务本地配置（端口 8011）
+# 数据源配置在 Nacos 的 datasource-config.yaml（多服务共享）
+# ============================================================
 server:
   port: 8011
 
@@ -6,23 +10,34 @@ spring:
     name: integrated-storage
   cloud:
     nacos:
+      # ---- 服务注册：把自己注册到 Nacos，供网关/订单服务发现 ----
       discovery:
         server-addr: nacos-server:8848
         group: integrated-example
+      # ---- 配置中心 ----
       config:
         server-addr: nacos-server:8848
         group: integrated-example
+        file-extension: yaml
+  # ---- 从 Nacos 导入两份配置 ----
+  # 1. integrated-storage.yaml：本服务专属配置（当前为空壳，预留扩展）
+  # 2. datasource-config.yaml ：公共数据源配置（账号/密码/驱动等，多服务共享）
+  #    注意：每个服务在专属配置里覆盖各自的 url（分库），见 config-init/config/integrated-storage.yaml
   config:
     import:
       - optional:nacos:integrated-storage.yaml
       - optional:nacos:datasource-config.yaml
 
+# ---- Seata 客户端配置（AT 模式）----
 seata:
+  # 本服务在 Seata 中的应用标识，默认取 spring.application.name
   application-id: ${spring.application.name}
+  # 事务分组名：同一全局事务链路上的服务约定一致的分组映射逻辑
   tx-service-group: ${spring.application.name}-group
   service:
+    # 事务分组 → Seata TC 集群名的映射（此处映射到名为 default 的集群）
     vgroup-mapping:
       integrated-storage-group: default
+    # TC 集群地址清单：file 直连模式（生产建议用 Nacos 注册发现 TC）
     grouplist:
       default: seata-server:8091
-
