@@ -1,0 +1,31 @@
+# ============================================================
+# Provider（点赞/消息提供方）服务配置
+# 这个服务不是做增删改查业务的，而是专门演示"发消息"和"限流"的
+# ============================================================
+
+# ========== 服务器端口 ==========
+server:
+  port: 38025          # Provider服务启动在 38025 端口
+
+# ========== Spring 和 Nacos 相关 ==========
+spring:
+  # 服务名称
+  application:
+    name: integrated3-provider    # 我叫"Provider服务"
+
+  cloud:
+    nacos:
+      # ---- 配置中心：从 Nacos 拉取配置 ----
+      config:
+        server-addr: 127.0.0.1:8848    # 去本机 Nacos 拿配置
+        group: integrated-example-3    # 从 integrated-example-3 这个组里拿
+        file-extension: yaml           # 配置文件是 yaml 格式
+
+      # ---- 服务注册：让别人发现我 ----
+      discovery:
+        server-addr: 127.0.0.1:8848    # 去本机 Nacos 注册自己
+        group: integrated-example-3    # 和订单/库存/账户在同一个组
+
+  # ---- 从 Nacos 额外加载配置 ----
+  config:
+    import: optional:nacos:integrated3-provider.yaml    # 加载"我的专属配置"

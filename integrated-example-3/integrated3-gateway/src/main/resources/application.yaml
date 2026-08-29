@@ -1,0 +1,25 @@
+# ============================================================
+# 网关服务本地配置（端口 30020）
+# 路由规则、限流等业务配置放在 Nacos 的 integrated2-gateway.yaml 中
+# ============================================================
+server:
+  port: 30020
+
+spring:
+  application:
+    name: integrated3-gateway
+  cloud:
+    nacos:
+      config:
+        server-addr: 127.0.0.1:8848   # 本机 Nacos（原 docker 版是 nacos-server:8848）
+        group: integrated-example-3
+        file-extension: yaml
+      discovery:
+        server-addr: 127.0.0.1:8848
+        group: integrated-example-3
+  # ---- 从 Nacos 拉取配置文件 ----
+  # optional: 表示 Nacos 上没有该配置也不阻止启动
+  # 真正的网关路由规则（lb://integrated2-order 等）在 Nacos 的 integrated2-gateway.yaml 里维护，
+  # 好处：路由变更只需改 Nacos 配置并发布，网关动态刷新，无需重启
+  config:
+    import: optional:nacos:integrated2-gateway.yaml

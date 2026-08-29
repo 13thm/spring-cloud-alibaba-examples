@@ -1,0 +1,28 @@
+# ============================================================
+# 点赞消费者服务本地配置（端口 38024）
+# MQ 绑定/数据源配置在 Nacos 的 integrated2-consumer.yaml、datasource-config.yaml
+# ============================================================
+server:
+  port: 38024
+
+spring:
+  application:
+    name: integrated2-consumer
+  cloud:
+    nacos:
+      config:
+        file-extension: yaml
+        server-addr: 127.0.0.1:8848
+        group: integrated-example-3
+      # ---- 服务注册：被网关发现（Path=/praise/query 路由到本服务）----
+      discovery:
+        server-addr: 127.0.0.1:8848
+        group: integrated-example-3
+  # ---- 从 Nacos 导入两份配置 ----
+  # 1. integrated2-consumer.yaml：Stream 消费函数绑定（consumer-in-0 → PRAISE-TOPIC-02）、
+  #    拉取速率（pullInterval=4000ms / pullBatchSize=4）、数据源 url（integrated2_praise 库）
+  # 2. datasource-config.yaml ：公共数据源配置
+  config:
+    import:
+      - optional:nacos:integrated3-consumer.yaml
+      - optional:nacos:datasource-config.yaml

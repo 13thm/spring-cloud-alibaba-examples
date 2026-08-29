@@ -1,0 +1,55 @@
+# ============================================================
+# 库存服务启动配置
+# 这个文件放"启动时就必须知道"的东西
+# 其他配置（比如数据库连接）放到 Nacos 上统一管理
+# ============================================================
+
+# ========== 服务器端口 ==========
+server:
+  port: 38021          # 库存服务启动在 38021 端口
+
+# ========== Spring 和 Nacos 相关 ==========
+spring:
+  # 服务名称
+  application:
+    name: integrated3-storage    # 别人通过这个名字来找我（服务发现、网关路由都用它）
+
+  cloud:
+    nacos:
+      # ---- 服务注册：告诉别人我在哪 ----
+      discovery:
+        server-addr: 127.0.0.1:8848    # Nacos 注册中心的地址（就是本机的 Nacos）
+        group: integrated-example-3    # 我属于哪个组（用来和别人的服务隔离开）
+
+      # ---- 配置中心：从 Nacos 拉取配置 ----
+      config:
+        server-addr: 127.0.0.1:8848    # 去这个 Nacos 地址拿配置
+        group: integrated-example-3    # 从这个组里拿
+        file-extension: yaml           # 配置文件是 yaml 格式
+
+  # ---- 额外加载的配置文件（从 Nacos 上拉） ----
+  config:
+    import:
+      - optional:nacos:integrated3-storage.yaml    # 加载"我的专属配置"
+      - optional:nacos:datasource-config.yaml      # 加载"数据库公共配置"
+      # optional: 的意思是"如果拉不到也别报错，先启动再说"
+
+# ========== Seata 分布式事务配置 ==========
+seata:
+  # 我的名字（和上面服务名保持一致）
+  application-id: ${spring.application.name}
+
+  # 我要加入哪个事务圈子？
+  # 我参加分布式事务时，属于 integrated3-storage-group 这个组
+  tx-service-group: ${spring.application.name}-group
+
+  service:
+    # 我加入的圈（integrated3-storage-group）对应 Seata 的哪个集群？
+    # 答：对应名为 "default" 的 Seata 集群
+    vgroup-mapping:
+      integrated3-storage-group: default
+
+    # "default" 这个集群的服务器地址在哪里？
+    # 答：在本机 127.0.0.1 的 8091 端口
+    grouplist:
+      default: 127.0.0.1:8091

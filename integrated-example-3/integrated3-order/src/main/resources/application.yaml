@@ -1,0 +1,50 @@
+# ============================================================
+# 订单服务启动配置
+# 订单服务是分布式事务的"指挥官"
+# ============================================================
+
+# ========== 服务器端口 ==========
+server:
+  port: 38023          # 订单服务启动在 38023 端口
+
+# ========== Spring 和 Nacos 相关 ==========
+spring:
+  # 服务名称
+  application:
+    name: integrated3-order    # 我叫"订单服务"
+
+  cloud:
+    nacos:
+      # ---- 服务注册：让别人发现我 ----
+      discovery:
+        server-addr: 127.0.0.1:8848    # 去本机 Nacos 注册
+        group: integrated-example-3    # 和库存、账户在同一个组
+
+      # ---- 配置中心：从 Nacos 拉配置 ----
+      config:
+        server-addr: 127.0.0.1:8848    # 去本机 Nacos 拿配置
+        group: integrated-example-3    # 从同一个组里拿
+        file-extension: yaml           # yaml 格式
+
+  # ---- 从 Nacos 额外加载两份配置 ----
+  config:
+    import:
+      - optional:nacos:integrated3-order.yaml        # 我的专属配置
+      - optional:nacos:datasource-config.yaml        # 数据库公共配置
+
+# ========== Seata 分布式事务配置 ==========
+seata:
+  # 我的名字
+  application-id: ${spring.application.name}
+
+  # 我要加入的事务圈子
+  tx-service-group: ${spring.application.name}-group    # → integrated3-order-group
+
+  service:
+    # 这个圈对应 Seata 的哪个集群
+    vgroup-mapping:
+      integrated3-order-group: default    # 对应 default 集群
+
+    # default 集群的服务器地址
+    grouplist:
+      default: 127.0.0.1:8091    # 在本机 8091 端口

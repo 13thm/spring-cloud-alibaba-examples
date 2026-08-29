@@ -1,6 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/integrated-example-2/integrated2-account/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/integrated-example-2/integrated2-common/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/integrated-example-2/integrated2-gateway/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/integrated-example-2/integrated2-order/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/integrated-example-2/integrated2-praise-consumer/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/integrated-example-2/integrated2-praise-provider/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/integrated-example-2/integrated2-storage/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/integrated-example-2/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/integrated-example-2/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/integrated-example-3/integrated3-account/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/integrated-example-3/integrated3-account/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/integrated-example-3/integrated3-common/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/integrated-example-3/integrated3-common/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/integrated-example-3/integrated3-gateway/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/integrated-example-3/integrated3-order/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/integrated-example-3/integrated3-praise-consumer/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/integrated-example-3/integrated3-praise-provider/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/integrated-example-3/integrated3-storage/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/integrated-example-3/integrated3-storage/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/integrated-example-3/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/integrated-example-3/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
   </component>

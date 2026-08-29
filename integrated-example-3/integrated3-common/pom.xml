@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.thm.cloud</groupId>
+        <artifactId>integrated-example-3</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>integrated3-common</artifactId>
+    <name>integrated3-common</name>
+    <description>公共模块：统一响应 Result + 业务异常 BusinessException</description>
+
+    <!--
+      纯工具 jar：不依赖 Spring，无启动类，不加 spring-boot-maven-plugin。
+      其他模块通过 <dependency> 引用它，实现"统一返回格式"跨服务复用。
+    -->
+</project>

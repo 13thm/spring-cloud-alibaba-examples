@@ -1,0 +1,53 @@
+# ============================================================
+# 账户服务启动配置
+# 和库存服务的配置长得一模一样 —— 这就是微服务的"套路"
+# 换汤不换药，改个名字、改个端口就行了
+# ============================================================
+
+# ========== 服务器端口 ==========
+server:
+  port: 38022          # 账户服务启动在 38022 端口（库存是 38021）
+
+# ========== Spring 和 Nacos 相关 ==========
+spring:
+  # 服务名称
+  application:
+    name: integrated3-account    # 我叫"账户服务"，别人通过这个名字来找我
+
+  cloud:
+    nacos:
+      # ---- 服务注册：告诉别人我在哪 ----
+      discovery:
+        server-addr: 127.0.0.1:8848    # 去本机 Nacos 注册自己
+        group: integrated-example-3    # 属于 integrated-example-3 这个组（和库存同一个组）
+
+      # ---- 配置中心：从 Nacos 拉取配置 ----
+      config:
+        server-addr: 127.0.0.1:8848    # 去本机 Nacos 拿配置
+        group: integrated-example-3    # 从这个组里拿
+        file-extension: yaml           # 配置文件是 yaml 格式
+
+  # ---- 从 Nacos 额外加载两份配置 ----
+  config:
+    import:
+      - optional:nacos:integrated3-account.yaml    # 加载"我的专属配置"
+      - optional:nacos:datasource-config.yaml      # 加载"数据库公共配置"（和库存用同一份）
+
+# ========== Seata 分布式事务配置 ==========
+seata:
+  # 我的名字（和上面服务名保持一致）
+  application-id: ${spring.application.name}
+
+  # 我要加入的事务圈子
+  # 账户服务加入的是 integrated3-account-group 这个圈
+  tx-service-group: ${spring.application.name}-group
+
+  service:
+    # 我加入的圈对应 Seata 的哪个集群？
+    # 答：对应 "default" 集群
+    vgroup-mapping:
+      integrated3-account-group: default
+
+    # "default" 集群的服务器地址
+    grouplist:
+      default: 127.0.0.1:8091    # 在本机 8091 端口

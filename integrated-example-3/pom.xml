@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--
+      integrated-example-2 根 pom（教学版 integrated-example）
+      与原版的区别：
+        1. 自包含：不依赖上级目录的 pom，单独打开本目录即可开发
+        2. 去 Docker：所有中间件地址指向本机 127.0.0.1
+        3. 去 druid/前端：连接池用 Spring Boot 默认 HikariCP，测试统一用 curl
+      版本组合（务必三者配套，详见 docs/搭建教程.md 第 2 章）：
+        Spring Boot 3.2.4 + Spring Cloud 2023.0.1 + Spring Cloud Alibaba 2023.0.1.2 + JDK 17
+    -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.4</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>com.thm.cloud</groupId>
+    <artifactId>integrated-example-3</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>integrated-example-3</name>
+    <description>Spring Cloud Alibaba 综合整合示例（本地直跑教学版）</description>
+    <modules>
+        <module>integrated3-common</module>
+        <module>integrated3-storage</module>
+        <module>integrated3-account</module>
+        <module>integrated3-order</module>
+        <module>integrated3-praise-provider</module>
+        <module>integrated3-praise-consumer</module>
+        <module>integrated3-gateway</module>
+    </modules>
+
+    <properties>
+        <java.version>17</java.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- 三大 BOM 版本：Spring Boot 由 parent 管理，这里管理另外两个 -->
+        <spring-cloud.version>2023.0.1</spring-cloud.version>
+        <spring-cloud-alibaba.version>2023.0.1.2</spring-cloud-alibaba.version>
+        <mybatis-starter.version>3.0.3</mybatis-starter.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- Spring Cloud（Gateway / OpenFeign / LoadBalancer 等） -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- Spring Cloud Alibaba（Nacos / Sentinel / Seata / RocketMQ Stream） -->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${spring-cloud-alibaba.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- 本项目内部模块 -->
+            <dependency>
+                <groupId>com.thm.cloud</groupId>
+                <artifactId>integrated3-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+</project>
